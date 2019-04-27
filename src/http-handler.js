@@ -99,13 +99,18 @@ export function createHTTPHandler(adapter) {
    * @param {Object} req - Request object
    * @param {Object} res - Response object
    */
-  return function slackRequestListener(req, res) {
+  return async function slackRequestListener(req, res) {
     debug('request received - method: %s, path: %s', req.method, req.url);
     // Function used to send response
     const respond = sendResponse(res);
-
-    // Builds body of the request from stream and returns the raw request body
-    getRawBody(req)
+    const _getRawBody = (req) => {
+      return new Promise(async (res, rej) => {
+        res(req['rawBody'] || await getRawBody(req))
+      })
+    }
+    
+    // Builds body of the request from stream and returns the raw request body    
+    await _getRawBody(req)
       .then((r) => {
         const rawBody = r.toString();
 
