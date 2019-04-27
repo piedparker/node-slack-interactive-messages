@@ -109,7 +109,8 @@ export function createHTTPHandler(adapter) {
       });
     };
     
-    // Builds body of the request from stream and returns the raw request body    
+    // Builds body of the request from stream and returns the raw request body
+    console.log('req.rawBody', req['rawBody']);
     _getRawBody(req)
       .then((r) => {
         const rawBody = r.toString();
